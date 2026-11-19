@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ValueCard | Shop Smart • Save More</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f6f6;color:#222}
+header{background:#111;color:white;padding:18px;text-align:center}
+.logo{font-size:34px;font-weight:bold;color:#f5c542}
+header p{margin:5px}
+nav{background:#292929;padding:14px;text-align:center;position:sticky;top:0}
+nav a{color:white;text-decoration:none;margin:8px;font-size:13px}
+.hero{background:linear-gradient(120deg,#111,#444);color:white;text-align:center;padding:65px 15px}
+.hero h1{font-size:38px;color:#f5c542}
+.btn{background:#f5c542;color:#111;padding:12px 20px;border:0;border-radius:6px;font-weight:bold;cursor:pointer}
+.container{max-width:1100px;margin:auto;padding:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:16px}
+.card{background:white;padding:18px;border-radius:12px;text-align:center;box-shadow:0 2px 10px #ddd}
+.emoji{font-size:45px}
+.card button{background:#111;color:white;border:0;padding:10px;border-radius:5px;cursor:pointer}
+input{width:100%;padding:13px;margin:8px 0;border:1px solid #ccc;border-radius:6px}
+h2{margin-bottom:20px}
+footer{background:#111;color:white;text-align:center;padding:30px}
+footer p{color:#ddd}
+.small{font-size:13px;color:#777}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">ValueCard</div>
+<p>Shop Smart • Save More</p>
+</header>
+
+<nav>
+<a href="#home">Home</a>
+<a href="#categories">Categories</a>
+<a href="#products">Products</a>
+<a href="#cart">Cart</a>
+<a href="#seller">Seller</a>
+<a href="#account">Account</a>
+</nav>
+
+<section class="hero" id="home">
+<h1>Welcome to ValueCard</h1>
+<h3>Everything You Love, All in One Place!</h3>
+<p>Fashion • Shoes • Beauty • Accessories</p>
+<button class="btn" onclick="location.href='#products'">SHOP NOW</button>
+</section>
+
+<section class="container" id="categories">
+<h2>Shop By Category</h2>
+<div class="grid">
+<div class="card"><div class="emoji">👕</div><h3>Clothing</h3></div>
+<div class="card"><div class="emoji">👟</div><h3>Shoes</h3></div>
+<div class="card"><div class="emoji">💄</div><h3>Beauty</h3></div>
+<div class="card"><div class="emoji">👜</div><h3>Accessories</h3></div>
+</div>
+</section>
+
+<section class="container" id="products">
+<h2>Featured Products</h2>
+<input id="search" placeholder="Search your favourite products..." oninput="showProducts()">
+<div class="grid" id="productList"></div>
+</section>
+
+<section class="container" id="cart">
+<h2>Shopping Cart 🛒</h2>
+<div class="card" id="cartItems">Your cart is empty.</div>
+<h3 id="total">Total: ₹0</h3>
+<button class="btn" onclick="checkout()">Continue to Checkout</button>
+</section>
+
+<section class="container" id="account">
+<h2>Customer Registration</h2>
+<div class="card">
+<form onsubmit="register(event)">
+<input id="customerName" placeholder="Full Name" required>
+<input id="customerEmail" type="email" placeholder="Email Address" required>
+<input id="customerPhone" type="tel" placeholder="Mobile Number" required>
+<button class="btn">Register</button>
+</form>
+</div>
+</section>
+
+<section class="container" id="seller">
+<h2>Become a ValueCard Seller</h2>
+<div class="card">
+<form onsubmit="sellerRegister(event)">
+<input id="sellerName" placeholder="Seller Name" required>
+<input id="sellerPhone" placeholder="Mobile Number" required>
+<input id="sellerEmail" type="email" placeholder="Email Address" required>
+<input id="businessName" placeholder="Business Name" required>
+<button class="btn">Register as Seller</button>
+</form>
+</div>
+</section>
+
+<section class="container" id="payment">
+<h2>Payment Options</h2>
+<div class="card">
+<h3>Secure Online Payments</h3>
+<p>UPI • QR Code • PhonePe • Google Pay • Paytm</p>
+<p>Debit Card • Credit Card • Net Banking</p>
+<strong>Cash on Delivery Not Available</strong>
+<p class="small">Payment gateway integration is required to accept real payments.</p>
+</div>
+</section>
+
+<footer>
+<h2>ValueCard</h2>
+<p>Shop Smart • Save More</p>
+<p>Thank you for shopping with us!</p>
+<p>© 2026 ValueCard. All Rights Reserved.</p>
+</footer>
+
+<script>
+const products=[
+{name:"Men's Shirt",price:599,emoji:"👔",category:"Clothing"},
+{name:"Women's Dress",price:999,emoji:"👗",category:"Clothing"},
+{name:"Sports Shoes",price:1199,emoji:"👟",category:"Shoes"},
+{name:"Casual Shoes",price:899,emoji:"👞",category:"Shoes"},
+{name:"Beauty Kit",price:499,emoji:"💄",category:"Beauty"},
+{name:"Skin Care Kit",price:699,emoji:"🧴",category:"Beauty"},
+{name:"Handbag",price:799,emoji:"👜",category:"Accessories"},
+{name:"Fashion Watch",price:1299,emoji:"⌚",category:"Accessories"}
+];
+
+let cart=[];
+
+function showProducts(){
+let q=document.getElementById("search").value.toLowerCase();
+let html="";
+products.forEach((p,i)=>{
+if(p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q)){
+html+=`<div class="card">
+<div class="emoji">${p.emoji}</div>
+<h3>${p.name}</h3>
+<p>₹${p.price}</p>
+<button onclick="addCart(${i})">Add to Cart</button>
+</div>`;
+}
+});
+document.getElementById("productList").innerHTML=html;
+}
+
+function addCart(i){
+cart.push(products[i]);
+showCart();
+}
+
+function showCart(){
+let total=0;
+let html="";
+cart.forEach((p,i)=>{
+total+=p.price;
+html+=`<p>${p.name} - ₹${p.price}
+<button onclick="removeCart(${i})">Remove</button></p>`;
+});
+document.getElementById("cartItems").innerHTML=html||"Your cart is empty.";
+document.getElementById("total").innerText="Total: ₹"+total;
+}
+
+function removeCart(i){
+cart.splice(i,1);
+showCart();
+}
+
+function checkout(){
+if(cart.length===0){
+alert("Please add products to your cart first.");
+return;
+}
+alert("Checkout demo only. Secure payment gateway and order system are not connected yet.");
+}
+
+function register(e){
+e.preventDefault();
+alert("Registration demo submitted. Account creation requires secure backend setup.");
+}
+
+function sellerRegister(e){
+e.preventDefault();
+alert("Seller application demo submitted. Seller verification system will be connected later.");
+}
+
+showProducts();
+showCart();
+</script>
+
+</body>
+</html>
+
+HTML
