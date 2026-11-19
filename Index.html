@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ValueCard - Shop Smart • Save More</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+header{background:#111;color:white;padding:17px;text-align:center}
+.logo{font-size:30px;font-weight:bold;color:#e7bd65}
+header p{margin:5px;font-size:12px}
+.search{padding:12px;background:white;display:flex;gap:8px}
+.search input{flex:1;padding:12px;border:1px solid #ddd;border-radius:8px}
+.search button,.buy{background:#111;color:white;border:0;padding:11px 16px;border-radius:7px}
+.banner{background:#191919;color:white;padding:30px 18px;text-align:center}
+.banner h1{color:#e7bd65;font-size:28px}
+.banner p{font-size:14px}
+h2{padding:0 15px;font-size:21px}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px}
+.cat{background:white;border-radius:10px;padding:15px 3px;text-align:center;font-size:13px}
+.cat span{display:block;font-size:27px;margin-bottom:7px}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px}
+.product{background:white;border-radius:10px;overflow:hidden;padding-bottom:12px}
+.product .photo{height:130px;display:flex;align-items:center;justify-content:center;font-size:65px;background:#eee}
+.product h3{font-size:15px;margin:10px}
+.price{font-weight:bold;margin:10px;color:#b07b17}
+.buy{margin:0 10px;width:calc(100% - 20px);cursor:pointer}
+.cart{background:white;margin:12px;padding:15px;border-radius:10px}
+footer{background:#111;color:white;text-align:center;padding:22px;margin-top:20px}
+footer p{font-size:13px;color:#ccc}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">ValueCard</div>
+<p>SHOP SMART • SAVE MORE</p>
+</header>
+
+<div class="search">
+<input id="search" placeholder="प्रोडक्ट खोजें...">
+<button onclick="searchProducts()">Search</button>
+</div>
+
+<section class="banner">
+<h1>Welcome to ValueCard</h1>
+<p>आपकी पसंद, आपकी शॉपिंग!</p>
+<p>Fashion • Beauty • Lifestyle</p>
+</section>
+
+<h2>Shop by Category</h2>
+<div class="categories">
+<div class="cat"><span>👕</span>Clothing</div>
+<div class="cat"><span>👟</span>Shoes</div>
+<div class="cat"><span>💄</span>Beauty</div>
+<div class="cat"><span>👜</span>Accessories</div>
+</div>
+
+<h2>Featured Products</h2>
+<div class="products" id="products">
+<div class="product" data-name="Men T Shirt">
+<div class="photo">👕</div>
+<h3>Men T-Shirt</h3>
+<div class="price">₹499</div>
+<button class="buy" onclick="addCart('Men T-Shirt',499)">Add to Cart</button>
+</div>
+
+<div class="product" data-name="Shoes">
+<div class="photo">👟</div>
+<h3>Stylish Shoes</h3>
+<div class="price">₹999</div>
+<button class="buy" onclick="addCart('Stylish Shoes',999)">Add to Cart</button>
+</div>
+
+<div class="product" data-name="Beauty Kit">
+<div class="photo">💄</div>
+<h3>Beauty Kit</h3>
+<div class="price">₹599</div>
+<button class="buy" onclick="addCart('Beauty Kit',599)">Add to Cart</button>
+</div>
+
+<div class="product" data-name="Handbag">
+<div class="photo">👜</div>
+<h3>Fashion Handbag</h3>
+<div class="price">₹799</div>
+<button class="buy" onclick="addCart('Fashion Handbag',799)">Add to Cart</button>
+</div>
+</div>
+
+<div class="cart">
+<h2>🛒 My Shopping Cart</h2>
+<div id="cartItems">आपका कार्ट खाली है।</div>
+<h3 id="total">Total: ₹0</h3>
+</div>
+
+<footer>
+<h2>ValueCard</h2>
+<p>Shop Smart • Save More</p>
+<p>Thank you for shopping with us!</p>
+<p>© 2026 ValueCard</p>
+</footer>
+
+<script>
+let cart=[];
+function addCart(name,price){
+cart.push({name,price});
+showCart();
+}
+function showCart(){
+let area=document.getElementById('cartItems');
+area.innerHTML=cart.map((item,i)=>
+`<p>${item.name} - ₹${item.price}
+<button onclick="removeItem(${i})">Remove</button></p>`
+).join('');
+if(cart.length===0) area.innerHTML='आपका कार्ट खाली है।';
+let total=cart.reduce((sum,item)=>sum+item.price,0);
+document.getElementById('total').innerText='Total: ₹'+total;
+}
+function removeItem(i){
+cart.splice(i,1);
+showCart();
+}
+function searchProducts(){
+let q=document.getElementById('search').value.toLowerCase();
+document.querySelectorAll('.product').forEach(p=>{
+p.style.display=p.dataset.name.toLowerCase().includes(q)?'block':'none';
+});
+}
+</script>
+</body>
+</html>
